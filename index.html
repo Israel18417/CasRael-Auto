@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CasRael Automobiles | Curated Luxury Marques</title>
+  <meta name="description" content="Bespoke sourcing and acquisition of luxury, performance, and electric marques. Curated by industry specialists.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23e2b867' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'><path d='M20 50 L50 20 L80 50 L50 80 Z'/><path d='M35 50 L50 35 L65 50 L50 65 Z'/></svg>">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="app-header">
+    <div class="nav-container">
+      <a href="#" class="logo-link" id="logo-home">
+        <!-- Minimalist Emblem -->
+        <svg class="logo-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 50 L50 20 L80 50 L50 80 Z"/>
+          <path d="M35 50 L50 35 L65 50 L50 65 Z"/>
+        </svg>
+        <span class="text-gradient">CasRael</span>
+      </a>
+      <nav class="nav-links">
+        <span class="nav-item active" id="nav-home">Portfolio</span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <main class="main-content">
+
+    <!-- 1. Portfolio Home View -->
+    <div id="home-view" class="fade-in">
+      <section class="hero-section">
+        <h1 class="hero-title">The Acquisition of <span class="text-gradient">Fine Automobiles</span></h1>
+        <p class="hero-subtitle">Bespoke sourcing and brokerage of luxury, performance, and electric marques. Explore our represented registry below.</p>
+        <div class="search-wrapper">
+          <input type="text" id="brand-search" class="search-input" placeholder="Search represented marques...">
+          <span class="search-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+        </div>
+      </section>
+
+      <section class="brands-section">
+        <div class="section-header">
+          <h2 class="section-title">Represented Marques</h2>
+        </div>
+        <div id="brands-grid" class="brands-grid">
+          <!-- Dynamically populated from JS -->
+        </div>
+      </section>
+    </div>
+
+    <!-- 2. Brand Inventory Listings View -->
+    <div id="brand-details-view" class="brand-details-view fade-in">
+      <span class="back-link" id="btn-back-to-brands">← Return to Marque Registry</span>
+      <div id="brand-details-hero" class="brand-details-hero">
+        <!-- Dynamically populated from JS -->
+      </div>
+      <div class="section-header">
+        <h2 class="section-title">Available Inventory</h2>
+      </div>
+      <div id="models-grid" class="models-grid">
+        <!-- Dynamically populated from JS -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- App Footer -->
+  <footer class="app-footer">
+    <div class="footer-content">
+      <span style="font-weight: 500; color: var(--primary); font-size: 1rem; letter-spacing: 0.15em;">CasRael Automobiles</span>
+      <p>&copy; 2026 CasRael Dealership Systems. All rights reserved. Professional Brokerage Network.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Notification System -->
+  <div id="toast" class="toast">Action completed successfully</div>
+
+  <!-- MODALS -->
+
+  <!-- Modal 1: Car Detail Modal -->
+  <div id="detail-modal" class="modal-overlay">
+    <div class="modal-container">
+      <button class="modal-close-btn" aria-label="Close modal">×</button>
+      <div class="modal-image-banner">
+        <button id="modal-gallery-prev" class="gallery-arrow prev-arrow">←</button>
+        <img id="modal-banner-img" src="" alt="Vehicle Banner">
+        <button id="modal-gallery-next" class="gallery-arrow next-arrow">→</button>
+        <div id="modal-gallery-thumbnails" class="gallery-thumbnails-strip"></div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-header-info">
+          <span class="modal-brand-badge">
+            <span id="modal-brand-logo" style="width:16px; height:16px; display:inline-block; vertical-align:middle;"></span>
+            <span id="modal-brand-name" style="vertical-align:middle; font-weight:500; text-transform:uppercase; letter-spacing:0.08em; margin-left:0.5rem; font-size:0.8rem;"></span>
+          </span>
+          <div class="modal-title-row">
+            <h2 class="modal-title" id="modal-title">Model Name</h2>
+            <span class="modal-price" id="modal-price">₦0</span>
+          </div>
+        </div>
+
+        <div class="modal-content-grid">
+          <div class="modal-desc-col">
+            <div>
+              <h3 class="modal-section-title">Overview</h3>
+              <p class="modal-description" id="modal-description">Detailed description goes here...</p>
+            </div>
+            <div>
+              <h3 class="modal-section-title">Technical Features</h3>
+              <ul class="modal-features-list" id="modal-features-list">
+                <!-- Dynamically populated -->
+              </ul>
+            </div>
+          </div>
+          <div class="modal-specs-col">
+            <h3 class="modal-section-title">Technical Specification</h3>
+            <div class="modal-spec-grid">
+              <div class="modal-spec-row">
+                <span class="label">Classification</span>
+                <span class="val" id="modal-spec-category">N/A</span>
+              </div>
+              <div class="modal-spec-row">
+                <span class="label">Power Output</span>
+                <span class="val" id="modal-spec-hp">N/A</span>
+              </div>
+              <div class="modal-spec-row">
+                <span class="label">Range / Econ</span>
+                <span class="val" id="modal-spec-range">N/A</span>
+              </div>
+              <div class="modal-spec-row">
+                <span class="label">Transmission</span>
+                <span class="val" id="modal-spec-transmission">N/A</span>
+              </div>
+              <div class="modal-spec-row">
+                <span class="label">0-60 mph</span>
+                <span class="val" id="modal-spec-acceleration">N/A</span>
+              </div>
+              <div class="modal-spec-row">
+                <span class="label">Top Speed</span>
+                <span class="val" id="modal-spec-topspeed">N/A</span>
+              </div>
+            </div>
+            <button class="modal-action-btn" id="modal-inquiry-btn">Initiate Sourcing Inquiry</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Inquiry Form Modal -->
+  <div id="inquiry-modal" class="modal-overlay">
+    <div class="modal-container inquiry-modal-container">
+      <button class="modal-close-btn" aria-label="Close modal">×</button>
+      <div class="modal-body">
+        <h2 style="font-size:1.6rem; font-weight:400; margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:0.05em;" class="text-gradient">Sourcing Inquiry</h2>
+        <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:2rem; font-weight:300;">Enter your contact information below. A private client advisor will contact you within one business day.</p>
+        <form id="inquiry-form">
+          <div class="form-group">
+            <label for="inq-name">Your Full Name</label>
+            <input type="text" id="inq-name" class="form-input" required placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label for="inq-email">Email Address</label>
+            <input type="email" id="inq-email" class="form-input" required placeholder="john@example.com">
+          </div>
+          <div class="form-group">
+            <label for="inq-message">Bespoke Requirements / Acquisition Notes</label>
+            <textarea id="inq-message" class="form-input" placeholder="Detail any requested packages, delivery location constraints, or financing requests..."></textarea>
+          </div>
+          <button type="submit" class="modal-action-btn" style="margin-top:0.5rem;">Submit Acquisition Request</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
