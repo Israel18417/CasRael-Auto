@@ -6,7 +6,10 @@ document.addEventListener("DOMContentLoaded", () => {
     currentView: "home",
     selectedBrandId: null,
     selectedModelId: null,
-    searchQuery: ""
+    searchQuery: "",
+    modelSearchQuery: "",
+    modelFilterVal: "all",
+    modelSortVal: "default"
   };
 
   // DOM Elements Cache
@@ -25,7 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Gallery elements
     galleryPrev: document.getElementById("modal-gallery-prev"),
     galleryNext: document.getElementById("modal-gallery-next"),
-    galleryThumbnails: document.getElementById("modal-gallery-thumbnails")
+    galleryThumbnails: document.getElementById("modal-gallery-thumbnails"),
+    
+    // Model search and filter elements
+    modelSearchVal: document.getElementById("model-search"),
+    modelFilterCategory: document.getElementById("model-filter-category"),
+    modelSort: document.getElementById("model-sort")
   };
 
   // Formal Notifications
@@ -63,6 +71,12 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (view === "brand-details") {
       els.brandDetailsView.style.display = "block";
       state.selectedBrandId = params.brandId;
+      state.modelSearchQuery = "";
+      state.modelFilterVal = "all";
+      state.modelSortVal = "default";
+      els.modelSearchVal.value = "";
+      els.modelFilterCategory.value = "all";
+      els.modelSort.value = "default";
       renderBrandDetails();
     }
     
@@ -137,16 +151,73 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
     
+    // Get all brand models to dynamically populate categories
+    const allBrandModels = db.models.filter(m => m.brandId === state.selectedBrandId);
+    const uniqueCategories = Array.from(new Set(allBrandModels.map(m => m.category))).sort();
+    
+    const currentCategory = state.modelFilterVal;
+    els.modelFilterCategory.innerHTML = '<option value="all">All Classifications</option>';
+    uniqueCategories.forEach(cat => {
+      const opt = document.createElement("option");
+      opt.value = cat;
+      opt.textContent = cat;
+      els.modelFilterCategory.appendChild(opt);
+    });
+    
+    if (uniqueCategories.includes(currentCategory)) {
+      els.modelFilterCategory.value = currentCategory;
+    } else {
+      state.modelFilterVal = "all";
+      els.modelFilterCategory.value = "all";
+    }
+
     els.modelsGrid.innerHTML = "";
-    const models = db.models.filter(m => m.brandId === state.selectedBrandId);
+    
+    // Filter models
+    let models = [...allBrandModels];
+    
+    const query = state.modelSearchQuery.toLowerCase().trim();
+    if (query) {
+      models = models.filter(m => 
+        m.name.toLowerCase().includes(query) || 
+        m.category.toLowerCase().includes(query) ||
+        (m.features && m.features.some(f => f.toLowerCase().includes(query)))
+      );
+    }
+    
+    if (state.modelFilterVal !== "all") {
+      models = models.filter(m => m.category === state.modelFilterVal);
+    }
+    
+    // Sort models
+    if (state.modelSortVal === "price-asc") {
+      models.sort((a, b) => a.price - b.price);
+    } else if (state.modelSortVal === "price-desc") {
+      models.sort((a, b) => b.price - a.price);
+    } else if (state.modelSortVal === "hp-desc") {
+      models.sort((a, b) => {
+        const hpA = parseInt(a.hp) || 0;
+        const hpB = parseInt(b.hp) || 0;
+        return hpB - hpA;
+      });
+    }
     
     if (models.length === 0) {
-      els.modelsGrid.innerHTML = `
-        <div class="empty-state" style="grid-column: 1/-1;">
-          <h3>No holdings registered</h3>
-          <p>There are currently no active listings cataloged under the ${brand.name} marque.</p>
-        </div>
-      `;
+      if (query) {
+        els.modelsGrid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1/-1;">
+            <h3>No matching models</h3>
+            <p>Your search parameter returned no available models. Please try a different query.</p>
+          </div>
+        `;
+      } else {
+        els.modelsGrid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1/-1;">
+            <h3>No holdings registered</h3>
+            <p>There are currently no active listings cataloged under the ${brand.name} marque.</p>
+          </div>
+        `;
+      }
       return;
     }
     
@@ -340,6 +411,21 @@ document.addEventListener("DOMContentLoaded", () => {
   els.searchVal.addEventListener("input", (e) => {
     state.searchQuery = e.target.value;
     renderBrands();
+  });
+
+  els.modelSearchVal.addEventListener("input", (e) => {
+    state.modelSearchQuery = e.target.value;
+    renderBrandDetails();
+  });
+
+  els.modelFilterCategory.addEventListener("change", (e) => {
+    state.modelFilterVal = e.target.value;
+    renderBrandDetails();
+  });
+
+  els.modelSort.addEventListener("change", (e) => {
+    state.modelSortVal = e.target.value;
+    renderBrandDetails();
   });
 
   document.getElementById("btn-back-to-brands").addEventListener("click", () => {

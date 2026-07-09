@@ -6,3 +6,5 @@ Thumbs.db
 # Agent Workspace Configs
 .agents/
 .gemini/
+
+.vercel
